@@ -9,3 +9,7 @@ class MainWindow(QWidget):
     # MainWindowクラスの初期化(GUIの生成、シグナルスロット接続)
     def __init__(self, parent = None):
         super(MainWindow, self).__init__(parent)
+
+    # グラフ生成関数
+    def createGraph(self, folderPath, fileName):
+        print('createGraph')
