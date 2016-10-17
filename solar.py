@@ -1,85 +1,69 @@
 # coding:UTF-8
+import os
+import datetime
+import shutil
 
-while True:
+oclock = datetime.datetime.today()
+
+while 6 <= oclock.hour <= 20:
+	import serial
 	import os
-	import datetime
 	import shutil
+	import time
 
-	os.mkdir("sample")
-	os.mkdir("gragh")
+	os.chdir("/home/ienaga/デスクトップ/python_class_sample/textdata") #change directly
+	ser = serial.Serial("/dev/ttyACM0",9600)
+	time.sleep(2)
+	ser.write(b'z')
+	serial = open("sample.txt", 'w')
+	print("begin to measure")
 
-	oclock = datetime.datetime.today()
+	for i in range (1,300):
+		val = ser.readline()
+		print(val.decode('utf-8'))
+		serial.write(val.decode('utf-8'))
 
-	while 6 <= oclock.hour <= 20:
-		import serial
-		import os
-		import shutil
-		import time
+	ser.write(b"y")
+	serial.close()
 
-		os.chdir("/home/ienaga/デスクトップ/python_class_sample/sample") #change directly
-		ser = serial.Serial("/dev/ttyACM0",9600)
-		time.sleep(2)
-		ser.write(b'z')
-		serial = open("sample.txt", 'w')
-		print("begin to measure")
+	from matplotlib import pyplot as plt
+	import numpy as np
+	import os
 
-		for i in range (1,300):
-			val = ser.readline()
-			print(val.decode('utf-8'))
-			serial.write(val.decode('utf-8'))
+	fig = plt.figure()
+	xm, ym = np.loadtxt('sample.txt', delimiter = ',', unpack = True)
 
-		ser.write(b"y")
-		serial.close()
+	for line in range (1,300):
+		vol = (xm*55)/1023
+		cur = (ym*5)/(1023*11)
 
-		from matplotlib import pyplot as plt
-		import numpy as np
-		import os
+	sampledata = (vol, cur)
 
-		fig = plt.figure()
-		xm, ym = np.loadtxt('sample.txt', delimiter = ',', unpack = True)
+	os.chdir("/home/ienaga/デスクトップ/python_class_sample/graghdata") #change directly
 
-		for line in range (1,300):
-			vol = (xm*55)/1023
-			cur = (ym*5)/(1023*11)
+	fig = plt.figure()
+	plt.xlim([5.5,23])
+	plt.ylim([0,0.4])
+	plt.plot(vol, cur, '-o')
 
-		sampledata = (vol, cur)
+	plt.savefig('sample.png')
 
-		os.chdir("/home/ienaga/デスクトップ/python_class_sample/gragh") #change directly
+	#text file calculate finish
 
-		fig = plt.figure()
-		plt.xlim([5.5,23])
-		plt.ylim([0,0.4])
-		plt.plot(vol, cur, '-o')
+	dailytime = datetime.datetime.now()
+	newname = "{0:%Y-%m-%d-%H-%M:%S}.png".format(dailytime)
+	os.rename("sample.png",newname)
 
-		plt.savefig('sample.png')
+	os.chdir("/home/ienaga/デスクトップ/python_class_sample/sample") #change directly
 
-		#text file calculate finish
+	for power in sampledata:
+		power = vol * cur
 
-		dailytime = datetime.datetime.now()
-		newname = "{0:%Y-%m-%d-%H-%M:%S}.png".format(dailytime)
-		os.rename("sample.png",newname)
+	sampledata = np.array([vol, cur, power])
 
-		os.chdir("/home/ienaga/デスクトップ/python_class_sample/sample") #change directly
+	from calculate import content
+	content(vol, cur, power)
 
-		for power in sampledata:
-			power = vol * cur
+	time.sleep(30.0)
 
-		sampledata = np.array([vol, cur, power])
-
-		from calculate import content
-		content(vol, cur, power)
-
-		time.sleep(30.0)
-
-		ser.close()
-
-	while oclock.hour > 23:
-		os.chdir("/home/pi/Desktop/python_class_sample") #change directly
-		newdate = datetime.datetime.now()
-		newname = "{0:%Y-%m-%d}".format(newdate)
-		os.rename("sample",newname)
-		
-		time.sleep(60)
-
-	while oclock.hour < 5:
-		time.sleep(120)
+	ser.close()
