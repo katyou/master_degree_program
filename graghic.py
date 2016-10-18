@@ -1,7 +1,6 @@
 import sys
-import os
 from PyQt4.QtGui import *
-from PyQt4 import QtGui
+from PyQt4.QtCore import *
 import datetime
 
 class MainWindow(QMainWindow):
@@ -13,20 +12,24 @@ class MainWindow(QMainWindow):
 
     def initUI(self):
         self.setGeometry(50, 50, 800, 700)
-        self.setWindowTitle('LineEdit')
+        self.setWindowTitle('太陽電池測定ソフト')
 
+        #時刻付きlabel追加
         self.textbox = QLineEdit(self)
         self.textbox.move(10,10)
-        self.textbox.resize(140,20)
-        self.show()
+        self.textbox.resize(250,30)
+        timer = QTimer(self)
+        timer.timeout.connect(self.time_draw)
+        timer.start(1000)
 
-        # timer = QTimer(self)
-        # timer.timeout.connect(self.time_draw)
-        # timer.start(1000) #msec
+        #label追加
+        self.label = QLabel('Duty値', self)
+        self.label.setGeometry(600,500,100,100)
+        self.show()
 
     def time_draw(self):
         d = datetime.datetime.today()
-        daystr=d.strftime("%Y-%m-%d %H:%M:%S")
+        daystr = d.strftime("20%y年%m月%d日 %H時%M分%S秒")
         self.statusBar().showMessage(daystr)
         self.textbox.setText(daystr)
 
