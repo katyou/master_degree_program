@@ -16,6 +16,7 @@ class MainWindow(QMainWindow):
 
     #view component 追加
     def initUI(self):
+        #ソフト全体の調整
         self.setGeometry(50, 50, 800, 700)
         self.setWindowTitle('太陽電池測定ソフト')
 
@@ -30,19 +31,26 @@ class MainWindow(QMainWindow):
         #label追加
         self.label1 = QLabel('Duty値', self)
         self.label1.setGeometry(600,500,100,100)
-        self.label1.resize(200,200)
 
         self.label2 = QLabel('ここにduty値が来るようにする', self)
         self.label2.setGeometry(600,520,200,200)
-        #self.label2.setPointSize(32)
 
+        #button 追加
         button = QtGui.QPushButton('測定スタート',self)
         button.setGeometry(550,200,200,100)
-        #self.connect(button, QtCore.SIGNAL('clicked()'), self.filename)
+        QtGui.QColor(10,10,10,10)
+        button.clicked.connect(self.clickedStart)  #acton時methodに飛ぶ
 
         button = QtGui.QPushButton('FINISH',self)
         button.setGeometry(550,300,200,50)
-        #self.connect(button, QtCore.SIGNAL('clicked()'), self.filename)
+        button.clicked.connect(self.clickedStart)  #acton時methodに飛ぶ
+
+        #textbox 追加
+        self.text = QTextEdit(self)
+        self.text.setGeometry(50,400,450,250)
+        self.label3 = QLabel('測定結果', self)
+        self.label3.setGeometry(240,270,200,200)
+
 
         comment = "測定装置停止中"
         self.label = QLabel(comment, self)
@@ -58,8 +66,9 @@ class MainWindow(QMainWindow):
         self.statusBar().showMessage(daystring)
         self.textbox.setText(daystr)
 
-    def comment(answer):
-        print("how")
+    def clickedStart(self):
+
+        from solar import content
 
 
 
