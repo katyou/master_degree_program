@@ -5,6 +5,9 @@ class Measurement:
 	def __init__(self):
 		self.measure = ""
 
+	def changedirectly(self):
+		os.chdir("/home/ienaga/デスクトップ/python_class_sample/master_degree_program/graghdata")
+
 	def arduinosolar(self):
 		serial = open("sample.txt", 'w')
 		for i in range (1,300):
@@ -18,13 +21,15 @@ import os
 import shutil
 import time
 
+measure = Measurement()
+measure.changedirectly()
+
 ser = serial.Serial("/dev/ttyACM0",9600)
 time.sleep(2)
 ser.write(b'z')
 serial = open("sample.txt", 'w')
 
-ard = Measurement()
-ard.arduinosolar()
+measure.arduinosolar()
 
 ser.write(b"y")
 serial.close()
