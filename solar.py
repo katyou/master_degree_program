@@ -1,9 +1,15 @@
 # coding:UTF-8
-def arduinosolar():
-	serial = open("sample.txt", 'w')
-	for i in range (1,300):
-		val = ser.readline()
-		serial.write(val.decode('utf-8'))
+class Measurement:
+	"""Measurement solar I-V curve"""
+
+	def __init__(self):
+		self.measure = ""
+
+	def arduinosolar(self):
+		serial = open("sample.txt", 'w')
+		for i in range (1,300):
+			val = ser.readline()
+			serial.write(val.decode('utf-8'))
 
 
 import datetime
@@ -17,7 +23,8 @@ time.sleep(2)
 ser.write(b'z')
 serial = open("sample.txt", 'w')
 
-arduinosolar()
+ard = Measurement()
+ard.arduinosolar()
 
 ser.write(b"y")
 serial.close()
