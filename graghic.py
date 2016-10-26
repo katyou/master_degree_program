@@ -67,7 +67,6 @@ class MainWindow(QMainWindow):
         self.textbox.setText(daystr)
 
     def clickedStart(self):
-
         from solar import content
 
 
