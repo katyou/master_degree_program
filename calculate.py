@@ -1,15 +1,5 @@
 # coding:UTF-8
 
-def textwrite(vol, cur):
-	from matplotlib import pyplot as plt
-	import numpy as np
-	import os
-
-	#calculate arduino
-	for line in range (1,300):
-		vol = (vol*55)/1023
-		cur = (cur*5)/(1023*11)
-
 def content(volta, currenting, powering ):
 	import numpy as np
 	from math import floor
@@ -28,7 +18,7 @@ def content(volta, currenting, powering ):
 	for i in range (1, 300):
 		index = data[x, 2]
 
-		if index == 2.708:                   #取り出したい電力の値
+		if index == 2.708:            #取り出したい電力の値 part1
 			voltagein = data[x, 0]
 			duty = 2.9/(2.9 + voltagein)
 			sendingvalue = duty * 1023
