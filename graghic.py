@@ -67,6 +67,8 @@ class MainWindow(QMainWindow):
         self.textbox.setText(daystr)
 
     def clickedStart(self):
+        comment = "測定装置中"
+        self.label = QLabel(comment, self)
         from solar import content
 
 
