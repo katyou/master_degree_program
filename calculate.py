@@ -5,7 +5,12 @@ class CalculateDuty:
 	def __init__(self):
 		self.measure = ""
 
-	def dutyratio1(self):
+	def changeserial(self):  #change value if you change serial port.
+		serialconnect = "/dev/ttyACM1"
+		return (serialconnect)
+
+	def dutyratio1(self, data):
+		x = 0
 		for i in range (1, 300):
 			index = data[x, 2]
 
@@ -21,7 +26,7 @@ class CalculateDuty:
 			else:
 				x += 1
 
-	def dutyratio2(self):
+	def dutyratio2(self, index):
 		if index != 2.708 and index != 2.71:
 			nextvalue = np.round(a,1)
 			datathree = np.transpose(nextvalue)
@@ -44,7 +49,7 @@ class CalculateDuty:
 				else:
 					z += 1
 
-	def dutyratio3(self):
+	def dutyratio3(self, index):
 		if index != 2.771 and index != 2.77:
 			if index != 2.8:
 				nextvalue = np.round(a,2)
@@ -67,11 +72,17 @@ class CalculateDuty:
 				print (str(duty))
 				time.sleep(3)
 
-def content(volta, currenting, powering ):
+
+#content function import from superclass.
+def content(volta, currenting, powering):
 	import numpy as np
 	from math import floor
 	from math import ceil
 	import time
+	import serial
+	import os
+	import shutil
+
 	dutymeasure = CalculateDuty()  #class declare
 
 	a = np.array([volta, currenting, powering])
@@ -81,9 +92,8 @@ def content(volta, currenting, powering ):
 	sample = open("test.txt", "w")
 	sample.write(str(data))
 	sample.close()
-	x = 0
 
-	dutymeasure.dutyratio1()
+	dutymeasure.dutyratio1(data)
 
 	dutymeasure.dutyratio2()
 
@@ -94,10 +104,8 @@ def content(volta, currenting, powering ):
 	dutying = str(fusin) + '\r\n'
 	print (str(dutying))
 
-	import serial
-	import os
-	import shutil
-	ser = serial.Serial("/dev/ttyACM2", 115200)
+	serialconnect = dutymeasure.changeserial()
+	ser = serial.Serial(serialconnect, 115200)
 	time.sleep(2)
 
 	ser.write(bytes([fusin]))

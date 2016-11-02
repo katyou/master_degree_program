@@ -5,6 +5,10 @@ class Measurement:
 	def __init__(self):
 		self.measure = ""
 
+	def changeserial(self):  #change value if you change serial port.
+		serialconnect = "/dev/ttyACM0"
+		return (serialconnect)
+
 	def changedirgragh(self):
 		os.chdir("/home/ienaga/デスクトップ/python_class_sample/master_degree_program/graghdata")
 
@@ -60,7 +64,7 @@ import time
 measure = Measurement()
 measure.changedirgragh()
 
-serialconnect = "/dev/ttyACM0"
+serialconnect = measure.changeserial()
 ser = serial.Serial(serialconnect,9600)
 time.sleep(2)
 ser.write(b'z')
