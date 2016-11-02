@@ -1,13 +1,81 @@
 # coding:UTF-8
+class CalculateDuty:
+	"""Caluculate duty ratio in fuel cell"""
+
+	def __init__(self):
+		self.measure = ""
+
+	def dutyratio1(self):
+		for i in range (1, 300):
+			index = data[x, 2]
+
+			if index == 2.708:     #取り出したい電力の値 part1
+				voltagein = data[x, 0]
+				duty = 2.9/(2.9 + voltagein)
+				sendingvalue = duty * 1023
+				print ("No.1")
+				print (str(duty))
+				time.sleep(5)
+				break
+
+			else:
+				x += 1
+
+	def dutyratio2(self):
+		if index != 2.708 and index != 2.71:
+			nextvalue = np.round(a,1)
+			datathree = np.transpose(nextvalue)
+			z = 0
+			sample = open("test2.txt", "w")
+			sample.write(str(datathree))
+			sample.close()
+
+			for i in range (1, 300):
+				index = datathree[z, 2]
+
+				if index == 2.7:       #取り出したい電力の値 part 3
+					voltagein = datathree[z,0]
+					duty = 2.9/(2.9 + voltagein)
+					sendingvalue = duty * 1023
+					print ("No.3")
+					print (str(duty))
+					time.sleep(5)
+					break
+				else:
+					z += 1
+
+	def dutyratio3(self):
+		if index != 2.771 and index != 2.77:
+			if index != 2.8:
+				nextvalue = np.round(a,2)
+				datafinish = np.transpose(nextvalue)
+				k = 0
+				sample = 0
+
+				for i in range (1, 300):
+					index = datafinish[k, 2]
+					if sample < index and index <= 2.35:
+						sample = index
+						voltagein = datafinish[k, 0]
+					else:
+						k += 1
+
+				duty = 2.9/(2.9 + voltagein)
+				sendingvalue = duty * 1023
+
+				print ("No.4")
+				print (str(duty))
+				time.sleep(3)
 
 def content(volta, currenting, powering ):
 	import numpy as np
 	from math import floor
 	from math import ceil
 	import time
+	dutymeasure = CalculateDuty()  #class declare
 
 	a = np.array([volta, currenting, powering])
-	support = np.round(a,3)
+	support = np.round(a, 3)
 	data = np.transpose(support)
 
 	sample = open("test.txt", "w")
@@ -15,89 +83,11 @@ def content(volta, currenting, powering ):
 	sample.close()
 	x = 0
 
-	for i in range (1, 300):
-		index = data[x, 2]
+	dutymeasure.dutyratio1()
 
-		if index == 2.708:            #取り出したい電力の値 part1
-			voltagein = data[x, 0]
-			duty = 2.9/(2.9 + voltagein)
-			sendingvalue = duty * 1023
-			print ("No.1")
-			print (str(duty))
-			time.sleep(5)
-			break
+	dutymeasure.dutyratio2()
 
-		else:
-			x += 1
-
-	if not index == 2.708:
-		nextvalue = np.round(a,2)
-		datatwo = np.transpose(nextvalue)
-		y = 0
-		sample = open("test1.txt", "w")
-		sample.write(str(datatwo))
-		sample.close()
-
-		for i in range (1, 300):
-			index = datatwo[y, 2]
-
-			if index == 2.71:               #取り出したい電力の値 part 2
-				voltagein = datatwo[y, 0]
-				duty = 2.9/(2.9 + voltagein)
-				sendingvalue = duty * 1023
-				print ("NO.2")
-				print (str(duty))
-				time.sleep(5)
-				break
-			else:
-				y += 1
-
-	if index != 2.708 and index != 2.71:
-		nextvalue = np.round(a,1)
-		datathree = np.transpose(nextvalue)
-		z = 0
-		sample = open("test2.txt", "w")
-		sample.write(str(datathree))
-		sample.close()
-
-
-		for i in range (1, 300):
-			index = datathree[z, 2]
-
-			if index == 2.7:                #取り出したい電力の値 part 3
-				voltagein = datathree[z,0]
-				duty = 2.9/(2.9 + voltagein)
-				sendingvalue = duty * 1023
-				print ("No.3")
-				print (str(duty))
-				time.sleep(5)
-				break
-			else:
-				z += 1
-
-	if index != 2.771 and index != 2.77:
-		if index != 2.8:
-			nextvalue = np.round(a,2)
-			datafinish = np.transpose(nextvalue)
-			k = 0
-			sample = 0
-
-			for i in range (1, 300):
-				index = datafinish[k, 2]
-				if sample < index and index <= 2.35:
-					sample = index
-					voltagein = datafinish[k, 0]
-				else:
-					k += 1
-
-			duty = 2.9/(2.9 + voltagein)
-			sendingvalue = duty * 1023
-
-
-
-		print ("No.4")
-		print (str(duty))
-		time.sleep(3)
+	dutymeasure.dutyratio3()
 
 
 	fusin = int(sendingvalue)

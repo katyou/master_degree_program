@@ -47,6 +47,8 @@ class Measurement:
 			power = vol * cur
 
 		sampledata = np.array([vol, cur, power])
+		from calculate import content
+		content(vol, cur, power)
 
 
 import datetime
@@ -75,6 +77,3 @@ newname = "{0:%Y-%m-%d-%H-%M:%S}.png".format(dailytime)
 os.rename("sample.png",newname)
 
 measure.changedirtxt()
-
-from calculate import content
-content(vol, cur, power)
