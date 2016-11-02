@@ -9,7 +9,7 @@ class CalculateDuty:
 		serialconnect = "/dev/ttyACM1"
 		return (serialconnect)
 
-	def dutyratio1(self, data):
+	def dutycalculation1(self, data):
 		x = 0
 		for i in range (1, 300):
 			index = data[x, 2]
@@ -26,7 +26,7 @@ class CalculateDuty:
 			else:
 				x += 1
 
-	def dutyratio2(self, index):
+	def dutycalculation2(self, index):
 		if index != 2.708 and index != 2.71:
 			nextvalue = np.round(a,1)
 			datathree = np.transpose(nextvalue)
@@ -49,7 +49,7 @@ class CalculateDuty:
 				else:
 					z += 1
 
-	def dutyratio3(self, index):
+	def dutyrcalculation3(self, index):
 		if index != 2.771 and index != 2.77:
 			if index != 2.8:
 				nextvalue = np.round(a,2)
@@ -93,11 +93,11 @@ def content(volta, currenting, powering):
 	sample.write(str(data))
 	sample.close()
 
-	dutymeasure.dutyratio1(data)
+	dutymeasure.dutycalculation1(data)
 
-	dutymeasure.dutyratio2()
+	dutymeasure.dutycalculation2()
 
-	dutymeasure.dutyratio3()
+	dutymeasure.dutycalculation3()
 
 
 	fusin = int(sendingvalue)
