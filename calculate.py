@@ -10,67 +10,68 @@ class CalculateDuty:
 		return (serialconnect)
 
 	def dutycalculation1(self, data):
-		x = 0
-		for i in range (1, 300):
-			index = data[x, 2]
+		for x in range (1, 299):
+			index = data[x, 2]  #electric power value
 
 			if index == 2.708:     #取り出したい電力の値 part1
 				voltagein = data[x, 0]
 				duty = 2.9/(2.9 + voltagein)
-				sendingvalue = duty * 1023
+				#sendingvalue = duty * 1023
 				print ("No.1")
 				print (str(duty))
 				time.sleep(5)
+				return (duty)
 				break
 
 			else:
 				x += 1
+		#return (index)
 
-	def dutycalculation2(self, index):
-		if index != 2.708 and index != 2.71:
-			nextvalue = np.round(a,1)
-			datathree = np.transpose(nextvalue)
-			z = 0
-			sample = open("test2.txt", "w")
-			sample.write(str(datathree))
-			sample.close()
+	def dutycalculation2(self, a):
+		import numpy as np
+		nextvalue = np.round(a, 1)
+		datathree = np.transpose(nextvalue)
+		sample = open("test2.txt", "w")
+		sample.write(str(datathree))
+		sample.close()
 
-			for i in range (1, 300):
-				index = datathree[z, 2]
+		for z in range (1, 299):
+			index = datathree[z, 2]
 
-				if index == 2.7:       #取り出したい電力の値 part 3
-					voltagein = datathree[z,0]
-					duty = 2.9/(2.9 + voltagein)
-					sendingvalue = duty * 1023
-					print ("No.3")
-					print (str(duty))
-					time.sleep(5)
-					break
-				else:
-					z += 1
-
-	def dutyrcalculation3(self, index):
-		if index != 2.771 and index != 2.77:
-			if index != 2.8:
-				nextvalue = np.round(a,2)
-				datafinish = np.transpose(nextvalue)
-				k = 0
-				sample = 0
-
-				for i in range (1, 300):
-					index = datafinish[k, 2]
-					if sample < index and index <= 2.35:
-						sample = index
-						voltagein = datafinish[k, 0]
-					else:
-						k += 1
-
+			if index == 2.71:      #取り出したい電力の値 part 3
+				voltagein = datathree[z, 0]
 				duty = 2.9/(2.9 + voltagein)
-				sendingvalue = duty * 1023
-
-				print ("No.4")
+				#sendingvalue = duty * 1023
+				print ("No.3")
 				print (str(duty))
-				time.sleep(3)
+				time.sleep(5)
+				return (duty)
+				break
+			else:
+				z += 1
+
+	def dutycalculation3(self, a):
+		import numpy as np
+		nextvalue = np.round(a,2)
+		datafinish = np.transpose(nextvalue)
+		k = 1
+		sample = 0
+
+		for k in range (1, 299):
+			index = datafinish[k, 2]
+			if sample < index and index <= 2.35:
+				sample = index
+				voltagein = datafinish[k, 0]
+			else:
+				k += 1
+
+		duty = 2.9/(2.9 + voltagein)
+		#sendingvalue = duty * 1023
+
+		print ("No.4")
+		print (str(duty))
+		return (duty)
+		time.sleep(3)
 
 
 #content function import from superclass.
@@ -82,6 +83,7 @@ def content(volta, currenting, powering):
 	import serial
 	import os
 	import shutil
+	index = 0
 
 	dutymeasure = CalculateDuty()  #class declare
 
@@ -95,20 +97,22 @@ def content(volta, currenting, powering):
 
 	dutymeasure.dutycalculation1(data)
 
-	dutymeasure.dutycalculation2()
+	if index != 2.708:
+		dutymeasure.dutycalculation2(a)
 
-	dutymeasure.dutycalculation3()
+	if index != 2.771 and index != 2.77:
+		if index != 2.8:
+			dutymeasure.dutycalculation3(a)
 
-
-	fusin = int(sendingvalue)
-	dutying = str(fusin) + '\r\n'
+	senddutyvalue = int(duty)
+	dutying = str(duty) + '\r\n'
 	print (str(dutying))
 
 	serialconnect = dutymeasure.changeserial()
 	ser = serial.Serial(serialconnect, 115200)
 	time.sleep(2)
 
-	ser.write(bytes([fusin]))
+	ser.write(bytes([senddutyvalue]))
 
 
 # gragh 表示,保存するためのメソッド
