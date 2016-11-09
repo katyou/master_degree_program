@@ -28,7 +28,6 @@ class CalculateDuty:
 		#return (index)
 
 	def dutycalculation2(self, a):
-		import numpy as np
 		nextvalue = np.round(a, 1)
 		datathree = np.transpose(nextvalue)
 		sample = open("test2.txt", "w")
@@ -51,7 +50,6 @@ class CalculateDuty:
 				z += 1
 
 	def dutycalculation3(self, a):
-		import numpy as np
 		nextvalue = np.round(a,2)
 		datafinish = np.transpose(nextvalue)
 		k = 1
@@ -70,20 +68,22 @@ class CalculateDuty:
 
 		print ("No.4")
 		print (str(duty))
-		return (duty)
 		time.sleep(3)
+		return (duty)
 
+import numpy as np
+from math import floor
+from math import ceil
+import time
+import serial
+import os
+import shutil
 
 #content function import from superclass.
 def content(volta, currenting, powering):
-	import numpy as np
-	from math import floor
-	from math import ceil
-	import time
-	import serial
-	import os
-	import shutil
+
 	index = 0
+	duty = 0
 
 	dutymeasure = CalculateDuty()  #class declare
 
