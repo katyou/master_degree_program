@@ -54,13 +54,6 @@ class Measurement:
 		sampledata = np.array([voltage, current, power])
 		from calculate import content
 		content(voltage, current, power)
-		#return(sampledata)
-
-	def electricpowermeasurement(self, sampledata, voltage, current):
-		for power in sampledata:
-			power = voltage * current
-
-		sampledata = np.array([voltage, current, power])
 		return(sampledata)
 
 
@@ -86,10 +79,8 @@ while True:
 
 	sampledata = measure.plotmeasurement()
 
-	#measure.electricpowermeasurement(sampledata)
-
-	# from calculate import content
-	# content(voltage, current, power)
+	from calculate import content
+	content(sampledata[voltage], sampledata[current], sampledata[power])
 
 	measure.changedirgragh()
 	dailytime = datetime.datetime.now()
