@@ -12,11 +12,13 @@ class Measurement:
 	def changedirgragh(self):
 		os.chdir("/home/ienaga/デスクトップ/python_class_sample/master_degree_program/graghdata")
 
-	def changedirtxt(self):
+	def changedirtxt(self, newname):
 		shutil.copy2("/home/ienaga/デスクトップ/python_class_sample/master_degree_program/graghdata/sample.txt",
 		              "/home/ienaga/デスクトップ/python_class_sample/master_degree_program/textdata/sample.txt")
 		os.remove('sample.txt')
+
 		os.chdir("/home/ienaga/デスクトップ/python_class_sample/master_degree_program/textdata")
+		os.rename("sample.txt",newname)
 
 	def arduinosolar(self):
 		serial = open("sample.txt", 'w')
@@ -51,11 +53,8 @@ class Measurement:
 		for power in sampledata:
 			power = voltage * current
 
-		sampledata = np.array([voltage, current, power])
-		from calculate import content
-		content(voltage, current, power)
-		return(sampledata)
-
+		data = np.array([voltage, current, power])
+		return(data)
 
 while True:
 	import datetime
@@ -63,6 +62,7 @@ while True:
 	import os
 	import shutil
 	import time
+	from calculate import content
 
 	measure = Measurement()
 
@@ -78,13 +78,11 @@ while True:
 	ser.close()
 
 	sampledata = measure.plotmeasurement()
-
-	from calculate import content
-	content(sampledata[voltage], sampledata[current], sampledata[power])
+	content(sampledata[0], sampledata[1], sampledata[2])
 
 	measure.changedirgragh()
 	dailytime = datetime.datetime.now()
 	newname = "{0:%Y-%m-%d-%H-%M:%S}.png".format(dailytime)
 	os.rename("sample.png",newname)
 
-	measure.changedirtxt()
+	measure.changedirtxt(newname)

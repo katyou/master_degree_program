@@ -93,13 +93,15 @@ import os
 import shutil
 
 #content function import from superclass.
-def content(volta, currenting, powering):
-
+def content(voltage, current, power):
 
 	dutymeasure = CalculateDuty()  #class declare
+	array = np.array([voltage, current, power])
 
-	a = np.array([volta, currenting, powering])
-	support = np.round(a, 3)
+	for i in range (1, 300):
+		print(voltage)
+
+	support = np.round(array, 3)
 	data = np.transpose(support)
 
 	sample = open("test.txt", "w")
@@ -108,12 +110,12 @@ def content(volta, currenting, powering):
 
 	multivalue = dutymeasure.dutycalculation1(data)
 
-	if multivalue != 2.708:
-		multivalue = dutymeasure.dutycalculation2(a)
+	if multivalue != 2.708:    #電力値により変更あり
+		multivalue = dutymeasure.dutycalculation2(array)
 
-	if multivalue != 2.771 and multivalue != 2.77:
-		if multivalue != 2.8:
-			multivalue = dutymeasure.dutycalculation3(a)
+	if multivalue != 2.771 and multivalue != 2.77:   #電力値により変更あり
+		if multivalue != 2.8:    #電力値により変更あり
+			multivalue = dutymeasure.dutycalculation3(array)
 
 	senddutyvalue = int(multivalue)
 	# dutying = str(duty) + '\r\n'
