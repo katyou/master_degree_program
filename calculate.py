@@ -13,9 +13,9 @@ class CalculateDuty:
 		for x in range (1, 299):
 			index = data[x, 2]  #electric power value
 
-			if index == 2.708:     #取り出したい電力の値 part1
+			if index == 1.445:     #取り出したい電力の値 part1
 				voltagein = data[x, 0]
-				duty = 2.9/(2.9 + voltagein)
+				duty = 250/(2.5 + voltagein)
 				#sendingvalue = duty * 1023
 				print ("No.1")
 				print (str(duty))
@@ -25,7 +25,7 @@ class CalculateDuty:
 
 			else:
 				x += 1
-		#return (index)
+		return (index)
 
 	def dutycalculation2(self, a):
 		nextvalue = np.round(a, 1)
@@ -37,9 +37,9 @@ class CalculateDuty:
 		for z in range (1, 299):
 			index = datathree[z, 2]
 
-			if index == 2.71:      #取り出したい電力の値 part 3
+			if index == 1.45:      #取り出したい電力の値 part 3
 				voltagein = datathree[z, 0]
-				duty = 2.9/(2.9 + voltagein)
+				duty = 250/(2.5 + voltagein)
 				#sendingvalue = duty * 1023
 				print ("No.3")
 				print (str(duty))
@@ -48,12 +48,14 @@ class CalculateDuty:
 				break
 			else:
 				z += 1
+		return (index)
 
 	def dutycalculation3(self, a):
-		nextvalue = np.round(a,2)
+		nextvalue = np.round(a, 2)
 		datafinish = np.transpose(nextvalue)
 		k = 1
 		sample = 0
+		voltagein = 0
 
 		for k in range (1, 299):
 			index = datafinish[k, 2]
@@ -63,13 +65,24 @@ class CalculateDuty:
 			else:
 				k += 1
 
-		duty = 2.9/(2.9 + voltagein)
+		if voltagein is None:
+			voltagein = 10
+		duty = 250/(2.5 + voltagein)    #duty*100 => arduino/100 because 1byte sending.
 		#sendingvalue = duty * 1023
 
 		print ("No.4")
 		print (str(duty))
 		time.sleep(3)
 		return (duty)
+
+	def outputvalue(self, ser):
+		os.chdir("/home/ienaga/デスクトップ/python_class_sample/master_degree_program/textdata")
+		output = open("output.txt", 'w')
+		for value in range (1, 300):
+			val2 = ser.readline()
+			print(val2.decode('utf-8'))
+			output.write(val2.decode('utf-8'))
+		output.close()
 
 import numpy as np
 from math import floor
@@ -82,8 +95,6 @@ import shutil
 #content function import from superclass.
 def content(volta, currenting, powering):
 
-	index = 0
-	duty = 0
 
 	dutymeasure = CalculateDuty()  #class declare
 
@@ -95,27 +106,28 @@ def content(volta, currenting, powering):
 	sample.write(str(data))
 	sample.close()
 
-	dutymeasure.dutycalculation1(data)
+	multivalue = dutymeasure.dutycalculation1(data)
 
-	if index != 2.708:
-		dutymeasure.dutycalculation2(a)
+	if multivalue != 2.708:
+		multivalue = dutymeasure.dutycalculation2(a)
 
-	if index != 2.771 and index != 2.77:
-		if index != 2.8:
-			dutymeasure.dutycalculation3(a)
+	if multivalue != 2.771 and multivalue != 2.77:
+		if multivalue != 2.8:
+			multivalue = dutymeasure.dutycalculation3(a)
 
-	senddutyvalue = int(duty)
-	dutying = str(duty) + '\r\n'
-	print (str(dutying))
+	senddutyvalue = int(multivalue)
+	# dutying = str(duty) + '\r\n'
+	print (senddutyvalue)
 
 	serialconnect = dutymeasure.changeserial()
 	ser = serial.Serial(serialconnect, 115200)
 	time.sleep(2)
-
 	ser.write(bytes([senddutyvalue]))
 
+	dutymeasure.outputvalue(ser)
 
-# gragh 表示,保存するためのメソッド
+
+# gragh 表示,保存するためのメソッド 今回使用しない
 def graphmodel():
   from matplotlib import pyplot as plt
   import numpy as np
@@ -125,8 +137,8 @@ def graphmodel():
 
   fig = plt.figure()
 
-  plt.xlim([5.5,23])
-  plt.ylim([0,0.3])
+  plt.xlim([5.5, 23])
+  plt.ylim([0, 0.3])
   plt.plot(voltage, current, '-o')
 
   s.chdir("/home/ienaga/デスクトップ/python_class_sample/gragh") #change directly
