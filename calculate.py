@@ -98,8 +98,7 @@ def content(voltage, current, power):
 	dutymeasure = CalculateDuty()  #class declare
 	array = np.array([voltage, current, power])
 
-	for i in range (1, 300):
-		print(voltage)
+	print(array)
 
 	support = np.round(array, 3)
 	data = np.transpose(support)
