@@ -10,7 +10,7 @@ INA226 ina2;
 void setup()
 {
   Serial.begin(115200);
-  Serial.println("IV-measurement");
+  Serial.println("               IV-measurement");
   Serial.println("-----------------------------------------------");
 
   ina.begin(0x45);              //solar cell                                       //INA226のアドレス値変更箇所
@@ -42,31 +42,44 @@ void setup()
 
 void loop()
 {
-  for(int dutymeasure = 50; dutymeasure <= 850; dutymeasure += 20){
-    Timer1.pwm(9, dutymeasure);
-    for (int i = 1; i <=10; i ++){
-      Serial.print(dutymeasure);
-      Serial.print(", ");
-    
-      Serial.print(ina.readBusVoltage(), 5); //5 is significant digits in serial.
-      Serial.print(", ");
-    
-      Serial.print(ina.readShuntCurrent(), 5);
-      Serial.print(",     ");
-    
-      Serial.print(ina2.readBusVoltage(), 5);
-      Serial.print(", ");
-    
-      Serial.print(ina2.readShuntCurrent(), 5);
-      Serial.print(", ");
-    
-      Serial.print(ina2.readBusPower(), 5);
-      Serial.print(", ");
-      Serial.print(ina2.readBusPower(), 5);
-    
-      Serial.println("");
-      delay(100);
+  Timer1.pwm(9, 0);
+  char a;
+  if (Serial.available() > 0)
+  {
+    a = Serial.read();
+    Serial.println(a);
+    delay(1000);
+    if (a == 'z'){
+      for(int dutymeasure = 50; dutymeasure <= 850; dutymeasure += 20){
+        Timer1.pwm(9, dutymeasure);
+        for (int i = 1; i <=10; i ++){
+          Serial.print(dutymeasure);
+          Serial.print(", ");
+        
+          Serial.print(ina.readBusVoltage(), 5); //5 is significant digits in serial.
+          Serial.print(", ");
+        
+          Serial.print(ina.readShuntCurrent(), 5);
+          Serial.print(",     ");
+        
+          Serial.print(ina2.readBusVoltage(), 5);
+          Serial.print(", ");
+        
+          Serial.print(ina2.readShuntCurrent(), 5);
+          Serial.print(", ");
+        
+          Serial.print(ina2.readBusPower(), 5);
+          Serial.print(", ");
+          Serial.print(ina2.readBusPower(), 5);
+        
+          Serial.println("");
+          delay(100);
+        }
+      }
+      Serial.println("---------------------------------------");
+    }
+    if (a == 'y'){
+      Timer1.pwm(9, 0);
     }
   }
-  delay(300000);
 }

@@ -5,7 +5,7 @@ class CalculateDuty:
 	def __init__(self):
 		self.measure = ""
 
-	def dutycalculation1(self, array):
+	def dutycalculation1(self, array, idealpower):
 		support = np.round(array, 3)
 		data = np.transpose(support)
 		sample = open("test.txt", "w")
@@ -15,7 +15,7 @@ class CalculateDuty:
 		for x in range (1, 299):
 			index = data[x, 2]  #electric power value
 
-			if index == 1.445:     #取り出したい電力の値 part1
+			if index == idealpower:     #取り出したい電力の値 part1
 				voltagein = data[x, 0]
 				duty = 250/(2.5 + voltagein)
 				print ("No.1")
@@ -25,9 +25,11 @@ class CalculateDuty:
 
 		return (index)
 
-	def dutycalculation2(self, a):
-		nextvalue = np.round(a, 1)
+	def dutycalculation2(self, array, idealpower):
+		nextvalue = np.round(array, 2)
 		datathree = np.transpose(nextvalue)
+
+		#test code
 		sample = open("test2.txt", "w")
 		sample.write(str(datathree))
 		sample.close()
@@ -35,19 +37,17 @@ class CalculateDuty:
 		for z in range (1, 299):
 			index = datathree[z, 2]
 
-			if index == 1.45:      #取り出したい電力の値 part 3
+			if index == idealpower:      #取り出したい電力の値 part 3
 				voltagein = datathree[z, 0]
 				duty = 250/(2.5 + voltagein)
-				#sendingvalue = duty * 1023
 				print ("No.2")
 				print (str(duty))
 				time.sleep(5)
 				return (duty)
-
 		return (index)
 
-	def dutycalculation3(self, a):
-		nextvalue = np.round(a, 2)
+	def dutycalculation3(self, array, idealpower, idealpower3):
+		nextvalue = np.round(array, 1)
 		datafinish = np.transpose(nextvalue)
 		k = 1
 		sample = 0
@@ -55,11 +55,11 @@ class CalculateDuty:
 
 		for k in range (1, 299):
 			index = datafinish[k, 2]
-			if sample < index and index <= 1.5:
+			if sample < index and index <= idealpower:
 				sample = index
 				voltagein = datafinish[k, 0]
 
-		#全部見つからなかった場合...
+		#if 全部見つからなかった場合...
 		if voltagein == 0:
 			voltagein = 10
 
@@ -79,18 +79,20 @@ import os
 import shutil
 
 #content function import from superclass.
-def content(voltage, current, power, idealpower, idealpower2):
+def content(voltage, current, power, idealpower):
 
 	dutymeasure = CalculateDuty()  #made instance
 
 	array = np.array([voltage, current, power])
-	multivalue = dutymeasure.dutycalculation1(array)
+	multivalue = dutymeasure.dutycalculation1(array, idealpower)
 
-	if multivalue != idealpower:    #電力値により変更あり
-		multivalue = dutymeasure.dutycalculation2(array)
+	if multivalue != idealpower:
+		idealpower2 = np.round(idealpower, 2)
+		multivalue = dutymeasure.dutycalculation2(array, idealpower2)
 
-	if multivalue != idealpower and multivalue != idealpower2:   #電力値により変更あり
-		multivalue = dutymeasure.dutycalculation3(array)
+	if multivalue != idealpower and multivalue != idealpower2:
+		idealpower3 = np.round(idealpower, 1)   #電力値により変更あり
+		multivalue = dutymeasure.dutycalculation3(array, ,idealpower, idealpower3)
 
 	senddutyvalue = int(multivalue)
 	print (senddutyvalue)

@@ -1,4 +1,9 @@
 # coding:UTF-8
+
+#You must connect arduino of port number "ttyACM0" and "tty ACM1"
+#                                         (solar I-V)  (fuelcell)
+#if you change port number, you rewrite ard_sending.py
+
 class Measurement:
 	"""Measurement solar I-V curve"""
 
@@ -126,16 +131,16 @@ while True:
 
 	#import method of content in calculate class.
 	from calculate import content
-	senddutyvalue = content(sampledata[0], sampledata[1], sampledata[2], 1.445, 1.45)
-	                           #content( [volatage],    [current],      [power]   )
+	senddutyvalue = content(sampledata[0], sampledata[1], sampledata[2], 2.215)
+	               #content(  [volatage],    [current],      [power],   idealpower)
 
 	from ard_sending import serialduty
-	ser = serialduty(senddutyvalue)
+	serduty = serialduty(senddutyvalue)
 
 	# #HACK: this code may not be good because test code.
 	# t = threading.Timer(target = adjustment)
 
-	measure.outputvalue(ser, t)
+	measure.outputvalue(serduty)
 
 	measure.changedirgragh()
 	dailytime = datetime.datetime.now()
