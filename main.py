@@ -76,9 +76,9 @@ class Measurement:
 
 		#HACK: this code may not be good because test code.
 		output = open("output.txt", 'w')
+		# t.start(variable, voltagein)  #Timer method starts
 		for value in range (1, 300):
 			valiable = ser.readline()
-			# t.start(variable, voltagein)  #Timer method starts
 			print(valiable.decode('utf-8'))
 			output.write(valiable.decode('utf-8'))
 		output.close()
@@ -133,6 +133,7 @@ while True:
 	from calculate import content
 	senddutyvalue = content(sampledata[0], sampledata[1], sampledata[2], 2.215)
 	               #content(  [volatage],    [current],      [power],   idealpower)
+	# I decided idealpower by thinking efficiency of electric power.
 
 	from ard_sending import serialduty
 	serduty = serialduty(senddutyvalue)

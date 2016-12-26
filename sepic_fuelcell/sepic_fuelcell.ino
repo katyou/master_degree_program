@@ -66,8 +66,6 @@ void setup()
   Serial.print("Voltage ");
   Serial.println("Current ");
 
-
-
   Serial.println("-----------------------------------------------");
 }
 

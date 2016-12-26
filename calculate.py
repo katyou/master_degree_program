@@ -47,7 +47,7 @@ class CalculateDuty:
 		return (index)
 
 	def dutycalculation3(self, array, idealpower, idealpower3):
-		nextvalue = np.round(array, 1)
+		nextvalue = np.round(array, 1)  #electric power rounding
 		datafinish = np.transpose(nextvalue)
 		k = 1
 		sample = 0
@@ -87,12 +87,12 @@ def content(voltage, current, power, idealpower):
 	multivalue = dutymeasure.dutycalculation1(array, idealpower)
 
 	if multivalue != idealpower:
-		idealpower2 = np.round(idealpower, 2)
+		idealpower2 = np.round(idealpower, 2)  #electric power rounding
 		multivalue = dutymeasure.dutycalculation2(array, idealpower2)
 
 	if multivalue != idealpower and multivalue != idealpower2:
-		idealpower3 = np.round(idealpower, 1)   #電力値により変更あり
-		multivalue = dutymeasure.dutycalculation3(array, ,idealpower, idealpower3)
+		idealpower3 = np.round(idealpower, 1)  #electric power rounding
+		multivalue = dutymeasure.dutycalculation3(array, idealpower, idealpower3)
 
 	senddutyvalue = int(multivalue)
 	print (senddutyvalue)
